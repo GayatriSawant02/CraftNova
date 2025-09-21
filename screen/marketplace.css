@@ -1,0 +1,45 @@
+/* Custom CSS for the Product Marketplace, Artisan Vibe */
+
+/* Define a custom color palette with artisan-themed colors */
+:root {
+    --artisan-brown: #a16207; /* A warm, earthy brown, matching your homepage button */
+    --artisan-brown-hover: #8c5206;
+    --artisan-terracotta: #b45f06; /* A burnt orange/terracotta for highlights */
+    --artisan-terracotta-hover: #a15505;
+    --bg-light-beige: #f7f3e8; /* A light, warm beige for the background */
+    --bg-lighter-beige: #fefcf5;
+}
+
+/* Base styles for the product card */
+.product-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Background gradient using the artisan palette */
+.bg-gradient-custom {
+    background-image: linear-gradient(to bottom right, var(--bg-lighter-beige), var(--bg-light-beige), var(--bg-lighter-beige));
+}
+
+/* Apply new colors to components using Tailwind's utility classes */
+.bg-artisan-brown {
+    background-color: var(--artisan-brown);
+}
+.hover\:bg-artisan-brown-hover:hover {
+    background-color: var(--artisan-brown-hover);
+}
+.focus\:ring-terracotta-500:focus {
+    --tw-ring-color: var(--artisan-terracotta);
+}
+
+/* This will be used in the JS to create the cards */
+.product-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 0.5rem;
+}

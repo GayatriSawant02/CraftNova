@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Sign-In & Sign-Up</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f1e3; /* Soft, warm background color */
+        }
+        .bg-custom-brown {
+            background-color: #6a4f41;
+        }
+        .bg-custom-brown:hover {
+            background-color: #554035;
+        }
+        .text-custom-brown {
+            color: #6a4f41;
+        }
+        .border-custom-brown {
+            border-color: #6a4f41;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen">
+
+    <!-- Main Container -->
+    <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md mx-auto my-8">
+
+        <!-- Header -->
+        <div class="mb-6 text-center">
+            <h1 class="text-3xl font-bold text-gray-800" id="form-title">Welcome Back!</h1>
+            <p class="mt-2 text-gray-500">Sign in to continue or create an account.</p>
+        </div>
+
+        <!-- Status Message Area -->
+        <div id="status-message" class="hidden mb-4 p-3 text-sm rounded-lg text-center" role="alert"></div>
+
+        <!-- Sign-In Form -->
+        <form id="signInForm" class="space-y-4">
+            <div>
+                <label for="signInEmail" class="block text-sm font-medium text-gray-700">Email Address</label>
+                <input type="email" id="signInEmail" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="your.email@example.com" required>
+            </div>
+            <div>
+                <label for="signInPassword" class="block text-sm font-medium text-gray-700">Password</label>
+                <input type="password" id="signInPassword" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="w-full flex justify-center items-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-custom-brown hover:bg-custom-brown focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-custom-brown transition-colors">Sign In</button>
+        </form>
+
+        <!-- Sign-Up Form (Initially Hidden) -->
+        <form id="signUpForm" class="space-y-4 hidden">
+            <div>
+                <label for="signUpEmail" class="block text-sm font-medium text-gray-700">Email Address</label>
+                <input type="email" id="signUpEmail" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="your.email@example.com" required>
+            </div>
+            <div>
+                <label for="signUpPassword" class="block text-sm font-medium text-gray-700">Password</label>
+                <input type="password" id="signUpPassword" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="••••••••" required>
+            </div>
+            <div>
+                <label for="signUpName" class="block text-sm font-medium text-gray-700">Full Name</label>
+                <input type="text" id="signUpName" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="John Doe" required>
+            </div>
+            <div>
+                <label for="signUpDob" class="block text-sm font-medium text-gray-700">Date of Birth</label>
+                <input type="date" id="signUpDob" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 transition-colors" required>
+            </div>
+            <div>
+                <label for="signUpMobile" class="block text-sm font-medium text-gray-700">Mobile Number</label>
+                <input type="tel" id="signUpMobile" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="(123) 456-7890" required>
+            </div>
+            <button type="submit" class="w-full flex justify-center items-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors">Sign Up</button>
+        </form>
+
+        <!-- Form Toggle Link -->
+        <div class="mt-6 text-center text-sm">
+            <span id="toggleText">Don't have an account?</span>
+            <a href="#" id="toggleFormLink" class="font-medium text-custom-brown hover:text-gray-700 transition-colors">Sign up</a>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Set Firebase debug log level
+        setLogLevel('debug');
+
+        // Global variables for Firebase config
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        // Firebase Initialization
+        let app, db, auth;
+        try {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+            console.log("Firebase initialized successfully.");
+        } catch (error) {
+            console.error("Firebase initialization failed:", error);
+            displayMessage("error", "Failed to initialize Firebase. Please check your configuration.");
+        }
+
+        // DOM elements
+        const signInForm = document.getElementById('signInForm');
+        const signUpForm = document.getElementById('signUpForm');
+        const toggleFormLink = document.getElementById('toggleFormLink');
+        const toggleText = document.getElementById('toggleText');
+        const formTitle = document.getElementById('form-title');
+        const statusMessage = document.getElementById('status-message');
+        
+        // State variables
+        let isSignInForm = true;
+
+        // Function to display messages
+        function displayMessage(type, message) {
+            statusMessage.textContent = message;
+            statusMessage.classList.remove('hidden', 'bg-red-100', 'text-red-700', 'bg-green-100', 'text-green-700', 'bg-blue-100', 'text-blue-700');
+            if (type === 'error') {
+                statusMessage.classList.add('bg-red-100', 'text-red-700');
+            } else if (type === 'success') {
+                statusMessage.classList.add('bg-green-100', 'text-green-700');
+            } else {
+                 statusMessage.classList.add('bg-blue-100', 'text-blue-700');
+            }
+            statusMessage.classList.remove('hidden');
+        }
+
+        // Function to toggle between forms
+        function toggleForm() {
+            isSignInForm = !isSignInForm;
+            if (isSignInForm) {
+                signInForm.classList.remove('hidden');
+                signUpForm.classList.add('hidden');
+                toggleText.textContent = "Don't have an account?";
+                toggleFormLink.textContent = "Sign up";
+                formTitle.textContent = "Welcome Back!";
+            } else {
+                signInForm.classList.add('hidden');
+                signUpForm.classList.remove('hidden');
+                toggleText.textContent = "Already have an account?";
+                toggleFormLink.textContent = "Sign in";
+                formTitle.textContent = "Create an Account";
+            }
+            statusMessage.classList.add('hidden');
+        }
+
+        // Toggle form event listener
+        toggleFormLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            toggleForm();
+        });
+
+        // Sign in event handler
+        signInForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = e.target.signInEmail.value;
+            const password = e.target.signInPassword.value;
+            displayMessage("info", "Signing in...");
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                console.log("Sign-in successful", userCredential.user);
+                displayMessage("success", "Sign-in successful!");
+            } catch (error) {
+                console.error("Sign-in error:", error.code, error.message);
+                let errorMessage = "An unknown error occurred. Please try again.";
+                switch (error.code) {
+                    case 'auth/wrong-password':
+                    case 'auth/user-not-found':
+                    case 'auth/invalid-credential':
+                        errorMessage = "Invalid email or password.";
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage = "The email address is not valid.";
+                        break;
+                    default:
+                        errorMessage = error.message;
+                        break;
+                }
+                displayMessage("error", errorMessage);
+            }
+        });
+
+        // Sign up event handler
+        signUpForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = e.target.signUpEmail.value;
+            const password = e.target.signUpPassword.value;
+            const name = e.target.signUpName.value;
+            const dob = e.target.signUpDob.value;
+            const mobile = e.target.signUpMobile.value;
+            displayMessage("info", "Creating account...");
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                console.log("Sign-up successful", user);
+
+                // Save additional user details to Firestore
+                const userDetailsRef = doc(db, 'artifacts', appId, 'users', user.uid, 'userDetails', user.uid);
+                await setDoc(userDetailsRef, {
+                    name: name,
+                    dateOfBirth: dob,
+                    mobileNumber: mobile,
+                    email: user.email,
+                    createdAt: new Date()
+                });
+
+                displayMessage("success", "Account created and details saved! Redirecting...");
+            } catch (error) {
+                console.error("Sign-up error:", error.code, error.message);
+                let errorMessage = "An unknown error occurred. Please try again.";
+                switch (error.code) {
+                    case 'auth/email-already-in-use':
+                        errorMessage = "This email is already in use. Try signing in.";
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage = "The email address is not valid.";
+                        break;
+                    case 'auth/weak-password':
+                        errorMessage = "The password is too weak. Please use a stronger password.";
+                        break;
+                    default:
+                        errorMessage = error.message;
+                        break;
+                }
+                displayMessage("error", errorMessage);
+            }
+        });
+
+        // Auth state observer
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // User is signed in
+                console.log("User is signed in:", user.uid);
+            } else {
+                // User is signed out or not authenticated
+                console.log("No user is signed in. Attempting anonymous sign-in.");
+                
+                try {
+                    if (initialAuthToken) {
+                        await signInWithCustomToken(auth, initialAuthToken);
+                        console.log("Signed in with custom token.");
+                    } else {
+                        await signInAnonymously(auth);
+                        console.log("Signed in anonymously.");
+                    }
+                } catch (error) {
+                    console.error("Authentication failed:", error);
+                    displayMessage("error", "Authentication failed. You may not be able to save data.");
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>

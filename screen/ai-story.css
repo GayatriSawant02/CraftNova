@@ -1,0 +1,4 @@
+/* Custom CSS for the page */
+.bg-gradient-custom {
+    background-image: linear-gradient(to bottom right, #e0f2fe, #eef2ff, #f3e8ff);
+}

@@ -1,0 +1,27 @@
+/* Custom CSS for the page */
+.bg-gradient-custom {
+    background-image: linear-gradient(to bottom right, #f0fdf4, #f0fdfa, #f0faff);
+}
+
+.step-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    transition-property: background-color, color;
+    transition-duration: 200ms;
+}
+
+.step-badge span {
+    font-weight: 500;
+}
+
+.step-badge.active {
+    background-color: #d1fae5;
+    color: #047857;
+}
+
+.content-step:not(.active) {
+    display: none;
+}

@@ -1,0 +1,265 @@
+:root{
+  --left-width: 58%;         
+  --right-width: 42%;
+  --container-height: 100vh; 
+  --right-padding: 60px;    
+  --main-bag-w: 320px;        
+  --main-bag-h: 460px;        
+  --small-bag-w: 300px;       
+  --small-bag-h: 340px;      
+  --btn-w: 150px;
+  --btn-gap: 18px;
+  --accent: #a26435;          
+  --muted: #dcd0c6;          
+}
+
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html,body { height: 100%; }
+body{
+  font-family: "Poppins", Arial, sans-serif;
+  color: #222;
+  background: white;
+}
+
+.container{
+  display: grid;
+  grid-template-columns: var(--left-width) var(--right-width);
+  height: var(--container-height);
+  width: 100%;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 40px;
+  position: absolute; 
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+  font-family: 'Mulish', sans-serif;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.nav-left nav a {
+  margin-right: 24px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.nav-left nav a:hover {
+  color: #d4d4d4;
+}
+
+.btn-signup {
+  background: #a5673f; 
+  border: none;
+  padding: 8px 18px;
+  border-radius: 20px;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-signup:hover {
+  background: #8b5433;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-right a {
+  color: #c16838;
+  text-decoration: none;
+  font-weight: 500;
+}
+.left {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  background: #000; 
+}
+.logo img {
+  height: 40px;   
+  width: auto;    
+  object-fit: contain;
+}
+
+
+.hands-img {
+  display: block;
+  width: 100%;
+  height: 100vh;         
+  object-fit: cover;       
+  object-position: center center;
+  transform-origin: center;
+
+  filter: saturate(.9) contrast(.95);
+}
+
+.left::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(24,12,8,0.25) 0%, rgba(24,12,8,0.45) 100%);
+  pointer-events: none;
+}
+
+.left-text{
+  position: absolute;
+  bottom: 100px;  
+  left: 56px;     
+  color: #fff;
+  z-index: 6;
+  line-height: 1;
+}
+
+.left-text h1{
+  font-family: "Playfair Display", "Georgia", serif;
+  font-size: 60px;    
+  font-weight: 700;
+  letter-spacing: -1px;
+  margin-bottom: 10px;
+  text-transform: none;
+}
+
+
+.left-text a{
+  display: inline-block;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 16px;
+  opacity: 0.95;
+}
+
+.right {
+  position: relative;
+  padding: var(--right-padding);
+  background: linear-gradient(180deg, #fff 0%, #fbf5ee 100%);
+  overflow: visible;
+  height: 100%;
+  width: 100%;
+}
+
+.buttons {
+  position: absolute;
+  top: 100px;         
+  right: calc(var(--right-padding) - 10px); 
+  display: flex;
+  flex-direction: column;
+  gap: var(--btn-gap);
+  z-index: 40;
+  align-items: flex-end;
+}
+
+
+.related, .buy {
+  width: var(--btn-w);
+  padding: 12px 18px;
+  border-radius: 28px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.02);
+  white-space: nowrap;
+}
+
+.related {
+  background: var(--muted);
+  color: #3a2f2a;
+}
+
+.buy {
+  background: var(--accent);
+  color: #fff;
+}
+
+.main-bag {
+  position: absolute;
+  top: 150px;    
+  left: 56px;   
+  width: var(--main-bag-w);
+  z-index: 20;
+  display: block;
+}
+
+.main-bag img {
+  display: block;
+  width: 100%;
+  height: var(--main-bag-h);
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 8px 30px rgba(20,20,20,0.06);
+}
+
+
+.product-info {
+  margin-top: 14px;
+  font-family: "Poppins", sans-serif;
+}
+.product-info .title {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  color: #3b342f;
+}
+.product-info .date {
+  font-size: 13px;
+  color: #7b6f6a;
+  margin-top: 6px;
+}
+
+
+.top-bar h3 {
+  display: none; 
+}
+
+.main-bag {
+  position: absolute;
+  top: 50px;      
+  right: 100px;      
+  width: 220px;     
+  height: 380px;
+  z-index: 20;
+}
+
+.main-bag img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.small-bag {
+  position: absolute;
+  right: 48px;   
+  bottom: 20px;    
+  width: 250px;
+  height: 380px;
+  z-index: 30;      
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.10);
+}
+
+.small-bag img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}

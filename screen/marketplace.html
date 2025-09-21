@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Marketplace</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --artisan-brown: #a16207; /* A warm, earthy brown */
+            --artisan-brown-hover: #8c5206;
+            --artisan-terracotta: #b45f06; /* A burnt orange/terracotta */
+            --artisan-terracotta-hover: #a15505;
+            --bg-light-beige: #f7f3e8; /* A light, warm beige */
+            --bg-lighter-beige: #fefcf5;
+        }
+        .product-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .bg-gradient-custom {
+            background-image: linear-gradient(to bottom right, var(--bg-lighter-beige), var(--bg-light-beige), var(--bg-lighter-beige));
+        }
+    </style>
+</head>
+<body class="bg-gradient-custom min-h-screen">
+
+<div class="p-6">
+    <div class="max-w-7xl mx-auto">
+        <div class="flex flex-col md:flex-row items-start md:items-center gap-4 mb-8">
+            <div class="flex items-center gap-4">
+                
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900">Product Marketplace</h1>
+                    <p class="text-gray-600 mt-1">Discover and manage all your AI-generated products</p>
+                </div>
+            </div>
+            <div class="flex gap-3 ml-auto">
+                <button id="createProductButton" class="bg-artisan-brown hover:bg-artisan-brown-hover text-white font-semibold py-2 px-4 rounded-lg flex items-center transition-colors">
+                    <i class="fas fa-plus w-4 h-4 mr-2"></i>
+                    Create New Product
+                </button>
+            </div>
+        </div>
+
+        <div class="mb-8 space-y-4">
+            <div class="relative">
+                <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                <input id="searchQuery" type="text" placeholder="Search products..." class="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-terracotta-500">
+            </div>
+            <div class="flex flex-wrap gap-4 items-center">
+                <span class="text-gray-600 font-medium">Filters:</span>
+                <select id="categoryFilter" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-terracotta-500">
+                    <option value="all">All Categories</option>
+                </select>
+                <select id="languageFilter" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-terracotta-500">
+                    <option value="all">All Languages</option>
+                </select>
+                <select id="priceFilter" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-terracotta-500">
+                    <option value="all">All Prices</option>
+                    <option value="under50">Under $50</option>
+                    <option value="50to100">$50 - $100</option>
+                    <option value="over100">Over $100</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <p class="text-gray-600" id="resultsInfo">
+                Showing 0 of 0 products
+            </p>
+        </div>
+
+        <div id="productList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            </div>
+    </div>
+</div>
+
+<script src="marketplace.js"></script>
+
+</body>
+</html>
